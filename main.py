@@ -1,5 +1,5 @@
 import copy
-
+VISUALIZE = {0: " ", 1: "X", -1: "O"}
 def make2DList(size):
     return [[0]*size for i in range(size)]
 
@@ -41,14 +41,27 @@ def won(board):
                 return 1
             if total == -4:
                 return -1
+            # diagonal 2
+            total = 0
+            for i in range(4):
+                try:
+                    total += board[row+i][col-i]
+                except:
+                    total += 0
+            if total == 4:
+                return 1
+            if total == -4:
+                return -1
 
 
 
 def groupPoints(L):
     if len(L) < 4:
         return 0
+    elif sum(L) == 4:
+        return 10000
     else:
-        return 3*sum(L) + len(L)
+        return sum(L)
 
 def rowPoints(L):
     maxiPoints = 0
@@ -144,19 +157,23 @@ def getNextStates(board, player):
             boards.append(newBoard)
     return boards
 
+def playmove(board, player, col):
+    newBoard = copy.deepcopy(board)
+    n = len(board)
+    for row in range(n-1,-1,-1):
+        if newBoard[row][col] == 0:
+            #empty space
+            newBoard[row][col] = player
+            break
+    return newBoard
 
 def print_board(L):
-    print("[",end="")
     for row in L:
         print("\t[",end="")
         for col in row:
-            if col == -1:
-                print("%d" % col,end="")
-            else:
-                print(" %d" % col,end="")
-            print(",",end="")
+            print(VISUALIZE[col],end=",")
         print("]\n",end="")
-    print("]")
+    print("\t 1 2 3 4 5 6 7")
 
 
 def print_boards(L):

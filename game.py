@@ -3,17 +3,25 @@ VISUALIZE = {0: " ", 1: "X", -1: "O"}
 def make2DList(size):
     return [[0]*size for i in range(size)]
 
+def connectedFour(L):
+    count = 0
+    for cell in L:
+        if cell == 1:
+            count +=1
+            if count == 4:
+                return 1
+        else:
+            count = 0
+    return 0
 
 def goodness(L):
     if len(L) < 4:
         return 0
-    elif sum(L) == 4:
+    elif connectedFour(L):
         return 10000
     else:
         return sum(L)
 
-def connectedFour(L):
-    return sum(L) == 4
 
 def rowPoints(L, accumulateFn):
     maxiPoints = 0

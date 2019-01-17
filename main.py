@@ -1,4 +1,4 @@
-
+import copy
 
 def make2DList(size):
     return [[0]*size for i in range(size)]
@@ -41,11 +41,14 @@ def won(board):
                 return 1
             if total == -4:
                 return -1
+
+
+
 def groupPoints(L):
     if len(L) < 4:
         return 0
     else:
-        return sum(L) + len(L)
+        return 3*sum(L) + len(L)
 
 def rowPoints(L):
     maxiPoints = 0
@@ -119,14 +122,46 @@ def heuristic(board):
             maxiPoints += mA
             miniPoints += mI
 
-    return (maxiPoints, miniPoints)
+    return maxiPoints - miniPoints
 
             # while True:
 
 
+def getNextStates(board, player):
+    boards =[]
+    n = len(board)
+    for i in range(n):
+        newBoard = copy.deepcopy(board)
+        legal = False
+        for j in range(n-1,-1,-1):
+            if newBoard[j][i] == 0:
+                #empty space
+                newBoard[j][i] = player
+                legal =True
+                break
+        # print(newBoard)
+        if (legal):
+            boards.append(newBoard)
+    return boards
 
 
+def print_board(L):
+    print("[",end="")
+    for row in L:
+        print("\t[",end="")
+        for col in row:
+            if col == -1:
+                print("%d" % col,end="")
+            else:
+                print(" %d" % col,end="")
+            print(",",end="")
+        print("]\n",end="")
+    print("]")
 
+
+def print_boards(L):
+    for board in L:
+        print_board(board)
 
 
 

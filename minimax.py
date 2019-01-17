@@ -1,4 +1,4 @@
-from main import *
+from game import *
 DEBUG = 0
 def dbg_print(s):
   if (DEBUG): print(s,end="")
@@ -25,25 +25,6 @@ def bestmove(board, player):
   return nextBoard
 
 
-board = [
- [ 0, 0, 0, 0, 0, 0, 0],
- [ 0, 0, 0, 0, 0, 0, 0],
- [ 1, 0, 1, 0, 0,-1, 0],
- [-1, 1,-1, 0, 1,-1, 0],
- [-1, 1, 1, 0, 1,-1, 0],
- [ 1, 1, 1, 0,-1, 1, 0],
- [ 1, 1, 1, 0,-1, 1, 0]
-]
-
-# board = [
-#   [ 0, 0, 0, 0],
-#   [ 0, 0, 0, 0],
-#   [ 0,-1, 0, 0],
-#   [ 1, 1, 0, 0]
-# ]
-n = 7
-board = [[0] * n for i in range(n)]
-
 def parse_input(s):
   global DEBUG
   res = input(s)
@@ -52,23 +33,39 @@ def parse_input(s):
   elif res == 'd':
     DEBUG = 1 - DEBUG
     print("Debug toggled")
+  elif res == 'q':
+    q = input("Press 'q' again if you're sure: ")
+    if q == 'q':
+      exit()
   else:
-    print("Invalid characters entered")
+    print("Invalid character(s) entered")
   return parse_input(s)
 
 
 # print(heuristic(board))
-player = 1
-for i in range(50):
-  if player == 1:
-    col = parse_input("Type in a Column: ")
-    board = playmove(board,player,col)
-  else:
-    board = bestmove(board,player)
-  print(i,VISUALIZE[player])
-  print_board(board)
-  if (won(board)):
-    print("Player: " + VISUALIZE[won(board)] + " wins!")
-    break
-  player *= -1
+def play():
+  player = 1
+  n = 7
+  board = [[0] * n for i in range(n)]
+  print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+  print("~~~ Welcome to Connect 4! ~~~")
+  print("~~~ You will play as 'X's ~~~")
+  print("~~~   I will play as 'O's ~~~")
+  print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+  print("~~~   Pick a column 1-7   ~~~")
+  print("~~~ Type 'd' to see debug ~~~")
+  print("~~~ Type 'q' to quit game ~~~")
+  print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+  for i in range(50):
+    print("Turn: "+str(i//2+1)+", Player: "+VISUALIZE[player])
+    if player == 1:
+      col = parse_input("Type in a Column: ")
+      board = playmove(board,player,col)
+    else:
+      board = bestmove(board,player)
+    print_board(board)
+    if (won(board)):
+      print("Player: " + VISUALIZE[won(board)] + " wins!")
+      break
+    player *= -1
   

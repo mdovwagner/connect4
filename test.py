@@ -1,4 +1,4 @@
-from main import *
+from game import *
 from minimax import *
 def test_heuristic(board, ans):
     if heuristic(board) != ans:

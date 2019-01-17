@@ -1,4 +1,5 @@
 from game import *
+import string
 DEBUG = 0
 def dbg_print(s):
   if (DEBUG): print(s,end="")
@@ -25,11 +26,11 @@ def bestmove(board, player):
   return nextBoard
 
 
-def parse_input(s):
+def parse_input(s, validKeys):
   global DEBUG
   res = input(s)
-  if res in "1234567" and len(res) == 1:
-    return int(res) -1
+  if res in validKeys and len(res) == 1:
+    return res
   elif res == 'd':
     DEBUG = 1 - DEBUG
     print("Debug toggled")
@@ -39,7 +40,7 @@ def parse_input(s):
       exit()
   else:
     print("Invalid character(s) entered")
-  return parse_input(s)
+  return parse_input(s, validKeys)
 
 
 # print(heuristic(board))
@@ -56,10 +57,14 @@ def play():
   print("~~~ Type 'd' to see debug ~~~")
   print("~~~ Type 'q' to quit game ~~~")
   print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+  VISUALIZE[1] = parse_input("Type any ASCII character for your piece ", string.printable)
+  VISUALIZE[-1] = parse_input("Type any ASCII character for my piece ", string.printable)
+  turn = parse_input("Type '1' to go first or '2' to go second: ", "12")
+  player = 1 if turn == '1' else -1
   for i in range(50):
     print("Turn: "+str(i//2+1)+", Player: "+VISUALIZE[player])
     if player == 1:
-      col = parse_input("Type in a Column: ")
+      col = int(parse_input("Type in a Column: ", "1234567")) - 1
       board = playmove(board,player,col)
     else:
       board = bestmove(board,player)
